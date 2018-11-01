@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">AndroidHw_2</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="name">HEMNES 헴네스</string>
+    <string name="contents">데이베드프레임 + 서랍3 80x200 cm</string>
+    <string name="price">349000</string>
+</resources>
