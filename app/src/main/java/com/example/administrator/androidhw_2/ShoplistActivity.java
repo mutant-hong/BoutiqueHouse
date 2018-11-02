@@ -3,6 +3,8 @@ package com.example.administrator.androidhw_2;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +20,15 @@ public class ShoplistActivity extends AppCompatActivity {
     Button homebtn, categorybtn, shoplistbtn, loginbtn, searchbtn;
     TextView shopping;
 
-    static  ArrayList<String> shoppinglist;
+    RecyclerView shoplistView;
+    RecyclerView.LayoutManager layoutManager;
+    ArrayList<Product> shoppinglist;
+    ShoplistAdapter shoplistAdapter;
 
     LinearLayout listlayout;
-    static String list = "";
-    static int i=0;
 
     int index = 0;
-    int amount = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,18 +42,37 @@ public class ShoplistActivity extends AppCompatActivity {
         shopping = (TextView) findViewById(R.id.shopping);
 
         listlayout = (LinearLayout)findViewById(R.id.listlayout);
-        shoppinglist = new ArrayList<>();
 
-        Log.d("ShoplistActivity", "onCreate");
+        shoplistView = (RecyclerView)findViewById(R.id.ShoplistView);
+        shoplistView.setHasFixedSize(true);
+
+        layoutManager = new LinearLayoutManager(this);
+        shoplistView.setLayoutManager(layoutManager);
+
+        shoppinglist = new ArrayList<>();
 
         Intent intent = getIntent();
         try{
-            Log.d("ShoplistActivity", "try catch");
-            Log.d("ShoplistActivity", intent.getExtras().getString("name").toString());
 
-            if (shoppinglist.size() == 0){
-                shoppinglist.add(intent.getExtras().getString("name"));
-            }
+            add(intent.getExtras().getString("name"), intent.getExtras().getInt("amount"));
+
+
+            shoplistAdapter = new ShoplistAdapter(shoppinglist);
+            shoplistView.setAdapter(shoplistAdapter);
+
+        }catch (Exception e){
+
+        }
+
+
+        Log.d("ShoplistActivity", "onCreate");
+
+
+
+        //if (shoppinglist.size() == 0){
+            //add(intent.getExtras().getString("name"));
+        //}
+            /*
             for (; i < shoppinglist.size(); i++) {
                 System.out.println(shoppinglist);
 
@@ -76,6 +98,7 @@ public class ShoplistActivity extends AppCompatActivity {
         }catch (Exception e){
 
         }
+        */
     }
 
     protected void onStart() {
@@ -131,67 +154,41 @@ public class ShoplistActivity extends AppCompatActivity {
     }
 
     @Override
-    protected  void onNewIntent(Intent intent){
+    protected  void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
+        boolean same = false;
+
         try{
-            Log.d("ShoplistActivity", "try catch");
-            Log.d("ShoplistActivity", intent.getExtras().getString("name").toString());
-
-           // if (shoppinglist.size() == 0){
-           //     shoppinglist.add(intent.getExtras().getString("name").toString());
-           // }
-
-            boolean same = false;
-
-           // if (shoppinglist.size() != 0){
-           //     shopping.setVisibility(View.GONE);
-
-                for(int j = 0; j < shoppinglist.size(); j++){
-                    if(intent.getExtras().getString("name").toString().equals(shoppinglist.get(j))){
-                        same = true;
-                        index = j;
-                        break;
-                    }
+            //쇼핑리스트 재방문
+            for (int j = 0; j < shoppinglist.size(); j++) {
+                if (intent.getExtras().getString("name").toString().equals(shoppinglist.get(j).name)) {
+                    same = true;
+                    index = j;
+                    break;
                 }
-           // }
-
-            if(same == true){
-                TextView textView = (TextView)findViewById(index);
-                String str = textView.getText().toString();
-                textView.setText(str + "\n +1");
             }
+
+            //등록한 상품이, 이미 있으면
+            if(same == true){
+                int addAmount = shoppinglist.get(index).amount + intent.getExtras().getInt("amount");
+                set(index, intent.getExtras().getString("name"), addAmount);
+            }
+
+            //없으면
 
             else{
                 shopping.setVisibility(View.GONE);
-                shoppinglist.add(intent.getExtras().getString("name"));
 
-                for (; i < shoppinglist.size(); i++) {
-                    System.out.println(shoppinglist);
-
-                    final TextView textView = new TextView(this);
-                    textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    textView.setText(shoppinglist.get(i));
-                    textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                    textView.setBackgroundResource(R.drawable.bck);
-                    textView.setId(i);
-
-                    textView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent2 = new Intent(getApplicationContext(), ProductActivity.class);
-                            intent2.putExtra("category", shoppinglist.get(textView.getId()));
-                            startActivity(intent2);
-                        }
-                    });
-
-                    listlayout.addView(textView);
-                }
+                add(intent.getExtras().getString("name"), intent.getExtras().getInt("amount"));
             }
+
+            shoplistView.setAdapter(shoplistAdapter);
 
         }catch (Exception e){
 
         }
+
     }
 
     @Override
@@ -225,4 +222,48 @@ public class ShoplistActivity extends AppCompatActivity {
         super.onDestroy();
         Log.d("ShoplistActivity", "onDestroy");
     }
+
+    private void add(String name, int amount){
+
+        listlayout.setVisibility(View.GONE);
+        shoplistView.setVisibility(View.VISIBLE);
+
+        if(name.equals("landskrona")){
+            shoppinglist.add(new Product(R.drawable.landskrona, "landskrona", 599000, 204, 89, 78, "new", amount));
+
+        }
+        else if(name.equals("kivik")){
+            shoppinglist.add(new Product(R.drawable.kivik, "kivik", 1999000, 328, 257, 83, "normal", amount));
+
+        }
+        else if(name.equals("tarva")){
+            shoppinglist.add(new Product(R.drawable.tarva, "tarva", 134000, 128, 209, 124, "normal", amount));
+
+        }
+        else if(name.equals("hemnnes")){
+            shoppinglist.add(new Product(R.drawable.hemnnes, "hemnnes", 289000, 154, 211, 188, "hot", amount));
+
+        }
+    }
+
+    private void set(int index, String name, int amount){
+
+        if(name.equals("landskrona")){
+            shoppinglist.set(index, new Product(R.drawable.landskrona, "landskrona", 599000, 204, 89, 78, "new", amount));
+
+        }
+        else if(name.equals("kivik")){
+            shoppinglist.set(index, new Product(R.drawable.kivik, "kivik", 1999000, 328, 257, 83, "normal", amount));
+
+        }
+        else if(name.equals("tarva")){
+            shoppinglist.set(index, new Product(R.drawable.tarva, "tarva", 134000, 128, 209, 124, "normal", amount));
+
+        }
+        else if(name.equals("hemnnes")){
+            shoppinglist.set(index, new Product(R.drawable.hemnnes, "hemnnes", 289000, 154, 211, 188, "hot", amount));
+
+        }
+    }
+
 }

@@ -3,11 +3,15 @@ package com.example.administrator.androidhw_2;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 
 public class CategoryActivity extends AppCompatActivity {
@@ -24,6 +28,10 @@ public class CategoryActivity extends AppCompatActivity {
     Button s1, s2;
 
     LinearLayout clayout, slayout;
+
+    RecyclerView category1;
+    RecyclerView.LayoutManager layoutManager1;
+    ArrayList<Category> categorylist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +53,20 @@ public class CategoryActivity extends AppCompatActivity {
 
         slayout = (LinearLayout)findViewById(R.id.slayout);
         clayout = (LinearLayout)findViewById(R.id.clayout);
+
+        category1 = (RecyclerView)findViewById(R.id.category1);
+        category1.setHasFixedSize(true);
+
+        layoutManager1 = new LinearLayoutManager(this);
+        category1.setLayoutManager(layoutManager1);
+
+        categorylist = new ArrayList<>();
+        categorylist.add(new Category("쇼파"));
+        categorylist.add(new Category("침대"));
+
+        CategoryAdapter categoryAdapter = new CategoryAdapter(categorylist);
+        category1.setAdapter(categoryAdapter);
+
     }
 
     protected void onStart() {

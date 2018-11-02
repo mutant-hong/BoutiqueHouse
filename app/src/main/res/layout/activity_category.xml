@@ -8,7 +8,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:id="@+id/clayout"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <Button
             android:layout_width="match_parent"
@@ -31,6 +32,15 @@
             android:text="의자"
             android:id="@+id/c4"/>
     </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:id="@+id/category1">
+
+
+    </android.support.v7.widget.RecyclerView>
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -3,28 +3,32 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/listlayout"
         android:layout_weight="1">
 
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:id="@+id/listlayout">
+            android:id="@+id/shopping"
+            android:text="등록된 상품 없음"
+            android:textAlignment="center"
+            android:textSize="20dp"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/shopping"
-                android:text="등록된 상품 없음"
-                android:textAlignment="center"
-                android:textSize="20dp"/>
+    </LinearLayout>
 
-        </LinearLayout>
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:id="@+id/ShoplistView"
+        android:visibility="gone">
 
-    </ScrollView>
+
+    </android.support.v7.widget.RecyclerView>
 
 
     <Button
