@@ -1,8 +1,14 @@
-package com.example.administrator.androidhw_2;
+package com.hong.mutant_hong.BoutiqueHouse;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.security.MessageDigest;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -26,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     static int cnt=0;
     LinearLayout view;
     ImageView non;
+
+    private Context mContext;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +54,62 @@ public class MainActivity extends AppCompatActivity {
         view = (LinearLayout) findViewById(R.id.view);
         list = new ArrayList<>();
 
+        mContext = getApplicationContext();
+
+        getHashKey(mContext);
+
     }
+    @Nullable
+
+    public static String getHashKey(Context context) {
+
+        final String TAG = "KeyHash";
+
+        String keyHash = null;
+
+        try {
+
+            PackageInfo info =
+
+                    context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_SIGNATURES);
+
+
+
+            for (Signature signature : info.signatures) {
+
+                MessageDigest md;
+
+                md = MessageDigest.getInstance("SHA");
+
+                md.update(signature.toByteArray());
+
+                keyHash = new String(Base64.encode(md.digest(), 0));
+
+                Log.d(TAG, keyHash);
+
+            }
+
+        } catch (Exception e) {
+
+            Log.e("name not found", e.toString());
+
+        }
+
+
+
+        if (keyHash != null) {
+
+            return keyHash;
+
+        } else {
+
+            return null;
+
+        }
+
+    }
+
+
 
     @Override
     protected void onStart(){

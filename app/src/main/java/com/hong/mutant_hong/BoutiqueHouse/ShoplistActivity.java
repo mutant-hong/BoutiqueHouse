@@ -1,4 +1,4 @@
-package com.example.administrator.androidhw_2;
+package com.hong.mutant_hong.BoutiqueHouse;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -34,6 +33,8 @@ public class ShoplistActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shoplist);
 
+        Log.d("ShoplistActivity", "onCreate");
+
         homebtn = (Button)findViewById(R.id.homebtn);
         categorybtn = (Button)findViewById(R.id.categorybtn);
         shoplistbtn = (Button)findViewById(R.id.shoplistbtn);
@@ -52,53 +53,17 @@ public class ShoplistActivity extends AppCompatActivity {
         shoppinglist = new ArrayList<>();
 
         Intent intent = getIntent();
+
+        shoplistAdapter = new ShoplistAdapter(shoppinglist);
+
         try{
-
             add(intent.getExtras().getString("name"), intent.getExtras().getInt("amount"));
-
-
-            shoplistAdapter = new ShoplistAdapter(shoppinglist);
             shoplistView.setAdapter(shoplistAdapter);
 
         }catch (Exception e){
 
         }
 
-
-        Log.d("ShoplistActivity", "onCreate");
-
-
-
-        //if (shoppinglist.size() == 0){
-            //add(intent.getExtras().getString("name"));
-        //}
-            /*
-            for (; i < shoppinglist.size(); i++) {
-                System.out.println(shoppinglist);
-
-                final TextView textView = new TextView(this);
-                textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                textView.setText(shoppinglist.get(i));
-                textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                textView.setBackgroundResource(R.drawable.bck);
-                textView.setId(i);
-
-                textView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent2 = new Intent(getApplicationContext(), ProductActivity.class);
-                        intent2.putExtra("category", shoppinglist.get(textView.getId()));
-                        startActivity(intent2);
-                    }
-                });
-
-                listlayout.addView(textView);
-            }
-
-        }catch (Exception e){
-
-        }
-        */
     }
 
     protected void onStart() {
@@ -157,10 +122,12 @@ public class ShoplistActivity extends AppCompatActivity {
     protected  void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
+        Log.d("ShoplistActivity", "onNewIntent");
         boolean same = false;
 
         try{
             //쇼핑리스트 재방문
+
             for (int j = 0; j < shoppinglist.size(); j++) {
                 if (intent.getExtras().getString("name").toString().equals(shoppinglist.get(j).name)) {
                     same = true;
@@ -178,8 +145,6 @@ public class ShoplistActivity extends AppCompatActivity {
             //없으면
 
             else{
-                shopping.setVisibility(View.GONE);
-
                 add(intent.getExtras().getString("name"), intent.getExtras().getInt("amount"));
             }
 

@@ -1,7 +1,6 @@
-package com.example.administrator.androidhw_2;
+package com.hong.mutant_hong.BoutiqueHouse;
 
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;

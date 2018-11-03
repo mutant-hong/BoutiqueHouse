@@ -1,4 +1,4 @@
-package com.example.administrator.androidhw_2;
+package com.hong.mutant_hong.BoutiqueHouse;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

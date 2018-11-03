@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.administrator.androidhw_2">
+    package="com.hong.mutant_hong.BoutiqueHouse">
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
@@ -13,32 +13,48 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+
+        <!-- 페이스북 메타데이터 -->
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_key" />
+
         <activity
-            android:name=".MainActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:name="com.hong.mutant_hong.BoutiqueHouse.MainActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".CategoryActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity android:name="com.hong.mutant_hong.BoutiqueHouse.CategoryActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:configChanges="orientation|screenSize"/>
 
-        <activity android:name=".ProductlistActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity android:name="com.hong.mutant_hong.BoutiqueHouse.ProductlistActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:configChanges="orientation|screenSize"/>
 
-        <activity android:name=".ShoplistActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-        <activity android:name=".LoginActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name="com.hong.mutant_hong.BoutiqueHouse.ShoplistActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:configChanges="orientation|screenSize"/>
+
+        <activity android:name="com.hong.mutant_hong.BoutiqueHouse.LoginActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:configChanges="orientation|screenSize">
         </activity>
 
-        <activity android:name=".ProductActivity"
+        <activity android:name="com.hong.mutant_hong.BoutiqueHouse.ProductActivity"
             android:launchMode="standard"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-        <activity android:name=".JoinActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:configChanges="orientation|screenSize"/>
+
+        <activity android:name="com.hong.mutant_hong.BoutiqueHouse.JoinActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:configChanges="orientation|screenSize"/>
 
     </application>
 
