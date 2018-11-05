@@ -85,6 +85,9 @@ public class JoinActivity extends AppCompatActivity {
                 if(nouser == true && userPW.getText().toString().equals(userPW_r.getText().toString()) && facebookstate.getText().toString().equals("인증 완료")){
                     userList.userList.put(userID.getText().toString(), userPW.getText().toString());
 
+                    //페북 인증 후 로그아웃
+                    LoginManager.getInstance().logOut();
+
                     Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
 
                     startActivity(intent);
@@ -108,7 +111,7 @@ public class JoinActivity extends AppCompatActivity {
                     Toast.makeText(JoinActivity.this, "본인인증 및 회원정보를 수정해주세요.", Toast.LENGTH_SHORT).show();
                 }
                 */
-                //LoginManager.getInstance().logOut();
+
             }
         });
 

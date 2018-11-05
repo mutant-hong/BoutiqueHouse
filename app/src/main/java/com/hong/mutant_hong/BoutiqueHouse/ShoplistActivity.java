@@ -26,6 +26,8 @@ public class ShoplistActivity extends AppCompatActivity {
 
     LinearLayout listlayout;
 
+    Button tointerior;
+
     int index = 0;
 
     @Override
@@ -64,12 +66,22 @@ public class ShoplistActivity extends AppCompatActivity {
 
         }
 
+        tointerior = (Button)findViewById(R.id.tointerior);
+
     }
 
     protected void onStart() {
         super.onStart();
 
         Log.d("ShoplistActivity", "onStart");
+
+        tointerior.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), InteriorActivity.class);
+                startActivity(intent);
+            }
+        });
 
         homebtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,9 +202,6 @@ public class ShoplistActivity extends AppCompatActivity {
 
     private void add(String name, int amount){
 
-        listlayout.setVisibility(View.GONE);
-        shoplistView.setVisibility(View.VISIBLE);
-
         if(name.equals("landskrona")){
             shoppinglist.add(new Product(R.drawable.landskrona, "landskrona", 599000, 204, 89, 78, "new", amount));
 
@@ -208,6 +217,11 @@ public class ShoplistActivity extends AppCompatActivity {
         else if(name.equals("hemnnes")){
             shoppinglist.add(new Product(R.drawable.hemnnes, "hemnnes", 289000, 154, 211, 188, "hot", amount));
 
+        }
+
+        if(!shoppinglist.isEmpty()){
+            listlayout.setVisibility(View.GONE);
+            shoplistView.setVisibility(View.VISIBLE);
         }
     }
 

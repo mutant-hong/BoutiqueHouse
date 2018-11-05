@@ -56,6 +56,9 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:configChanges="orientation|screenSize"/>
 
+        <activity android:name="com.hong.mutant_hong.BoutiqueHouse.InteriorActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+
     </application>
 
 </manifest>

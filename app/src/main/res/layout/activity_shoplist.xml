@@ -50,28 +50,32 @@
         android:gravity="center">
 
         <Button
-            android:id="@+id/homebtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="home" />
+            android:text="home"
+            android:layout_weight="1"
+            android:id="@+id/homebtn"/>
 
         <Button
-            android:id="@+id/categorybtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="category" />
+            android:text="category"
+            android:layout_weight="1"
+            android:id="@+id/categorybtn"/>
 
         <Button
-            android:id="@+id/shoplistbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="shoplist" />
+            android:text="shoplist"
+            android:layout_weight="1"
+            android:id="@+id/shoplistbtn"/>
 
         <Button
-            android:id="@+id/loginbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="login" />
+            android:text="login"
+            android:layout_weight="1"
+            android:id="@+id/loginbtn"/>
 
     </LinearLayout>
 </LinearLayout>

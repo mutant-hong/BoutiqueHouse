@@ -97,24 +97,28 @@
             android:id="@+id/homebtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="home" />
 
         <Button
             android:id="@+id/categorybtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="category" />
 
         <Button
             android:id="@+id/shoplistbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="shoplist" />
 
         <Button
             android:id="@+id/loginbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="login" />
 
     </LinearLayout>

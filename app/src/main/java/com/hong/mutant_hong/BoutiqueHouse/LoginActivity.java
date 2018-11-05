@@ -27,6 +27,8 @@ public class LoginActivity extends AppCompatActivity {
 
     TextView userName;
 
+    UserList userList;
+
     static boolean loginstate = false;
 
     @Override
@@ -53,6 +55,8 @@ public class LoginActivity extends AppCompatActivity {
         logoutbtn = (Button)findViewById(R.id.logoutbtn);
 
         userName = (TextView)findViewById(R.id.userName);
+
+        userList = new UserList();
 
         if(loginstate == true) {
             loginlayout.setVisibility(View.GONE);
@@ -120,17 +124,18 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(UserList.userList.isEmpty()){
+                if(userList.userList.isEmpty()){
+                    Log.d("userList size", "0");
                     Toast.makeText(LoginActivity.this, "로그인 실패", Toast.LENGTH_SHORT).show();
                 }
                 try {
                     //회원이 아닌경우
-                    if(UserList.userList.get(userid.getText().toString()) == null){
+                    if(userList.userList.get(userid.getText().toString()) == null){
                         Toast.makeText(LoginActivity.this, "로그인 실패", Toast.LENGTH_SHORT).show();
                     }
                     //아이디, 비밀번호 틀린경우
 
-                    if(!UserList.userList.get(userid.getText().toString()).equals(userpw.getText().toString())){
+                    if(!userList.userList.get(userid.getText().toString()).equals(userpw.getText().toString())){
                         Toast.makeText(LoginActivity.this, " 비밀번호가 맞지않습니다.", Toast.LENGTH_SHORT).show();
                     }
                     //로그인 성공

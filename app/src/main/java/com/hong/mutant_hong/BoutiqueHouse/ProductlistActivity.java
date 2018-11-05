@@ -44,9 +44,9 @@ public class ProductlistActivity extends AppCompatActivity {
 
         if (category.equals("쇼파")) {
             productlist.add(new Product(R.drawable.landskrona, "landskrona", 599000, 204, 89, 78, "new", 1));
-            productlist.add(new Product(R.drawable.kivik, "kivik", 1999000, 328, 257, 83, "normal", 1));
+            productlist.add(new Product(R.drawable.kivik, "kivik", 1999000, 328, 257, 83, "new", 1));
         } else if (category.equals("침대")) {
-            productlist.add(new Product(R.drawable.tarva, "tarva", 134000, 128, 209, 124, "normal", 1));
+            productlist.add(new Product(R.drawable.tarva, "tarva", 134000, 128, 209, 124, "event", 1));
             productlist.add(new Product(R.drawable.hemnnes, "hemnnes", 289000, 154, 211, 188, "hot", 1));
         }
 
