@@ -33,7 +33,6 @@ public class ProductActivity extends AppCompatActivity {
         down = (Button) findViewById(R.id.down);
 
         Intent intent = getIntent();
-
         name = intent.getExtras().getString("name");
 
         if(name.equals("landskrona")){

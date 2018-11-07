@@ -6,6 +6,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.graphics.Color;
+import android.graphics.ColorSpace;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +30,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     Button eventbtn, newbtn, hotbtn;
+    TextView prAtrribute;
     HorizontalScrollView eventLayout, newLayout, hotLayout;
     ImageButton tarvabtn, landskronabtn, kivikbtn, hemnnesbtn;
 
@@ -56,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
         newLayout = (HorizontalScrollView) findViewById(R.id.newlayout);
         hotLayout = (HorizontalScrollView) findViewById(R.id.hotlayout);
 
+        prAtrribute = (TextView)findViewById(R.id.prAtrribute);
+
         tarvabtn = (ImageButton)findViewById(R.id.tarvabtn);
         landskronabtn = (ImageButton)findViewById(R.id.landskronabtn);
         kivikbtn = (ImageButton)findViewById(R.id.kivikbtn);
@@ -75,6 +79,15 @@ public class MainActivity extends AppCompatActivity {
 
         eventbtn.setFocusableInTouchMode(true);
         eventbtn.requestFocus();
+
+        homebtn.setBackgroundColor(Color.rgb(160,186,237));
+        categorybtn.setBackgroundColor(Color.rgb(213,213,213));
+        shoplistbtn.setBackgroundColor(Color.rgb(213,213,213));
+        loginbtn.setBackgroundColor(Color.rgb(213,213,213));
+
+        eventbtn.setBackgroundColor(Color.rgb(160,186,237));
+        newbtn.setBackgroundColor(Color.rgb(213,213,213));
+        hotbtn.setBackgroundColor(Color.rgb(213,213,213));
 
         mContext = getApplicationContext();
 
@@ -143,6 +156,12 @@ public class MainActivity extends AppCompatActivity {
                 eventLayout.setVisibility(View.VISIBLE);
                 newLayout.setVisibility(View.GONE);
                 hotLayout.setVisibility(View.GONE);
+
+                prAtrribute.setText("이벤트상품");
+
+                eventbtn.setBackgroundColor(Color.rgb(160,186,237));
+                newbtn.setBackgroundColor(Color.rgb(213,213,213));
+                hotbtn.setBackgroundColor(Color.rgb(213,213,213));
             }
         });
 
@@ -152,6 +171,12 @@ public class MainActivity extends AppCompatActivity {
                 eventLayout.setVisibility(View.GONE);
                 newLayout.setVisibility(View.VISIBLE);
                 hotLayout.setVisibility(View.GONE);
+
+                prAtrribute.setText("신상품");
+
+                eventbtn.setBackgroundColor(Color.rgb(213,213,213));
+                newbtn.setBackgroundColor(Color.rgb(160,186,237));
+                hotbtn.setBackgroundColor(Color.rgb(213,213,213));
             }
         });
 
@@ -161,6 +186,12 @@ public class MainActivity extends AppCompatActivity {
                 eventLayout.setVisibility(View.GONE);
                 newLayout.setVisibility(View.GONE);
                 hotLayout.setVisibility(View.VISIBLE);
+
+                prAtrribute.setText("인기상품");
+
+                eventbtn.setBackgroundColor(Color.rgb(213,213,213));
+                newbtn.setBackgroundColor(Color.rgb(213,213,213));
+                hotbtn.setBackgroundColor(Color.rgb(160,186,237));
             }
         });
 
@@ -170,6 +201,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), ProductActivity.class);
                 intent.putExtra("name", "tarva");
                 startActivity(intent);
+                overridePendingTransition(0,0);
             }
         });
 
@@ -179,6 +211,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), ProductActivity.class);
                 intent.putExtra("name", "landskrona");
                 startActivity(intent);
+                overridePendingTransition(0,0);
             }
         });
 
@@ -188,6 +221,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), ProductActivity.class);
                 intent.putExtra("name", "kivik");
                 startActivity(intent);
+                overridePendingTransition(0,0);
             }
         });
 
@@ -197,49 +231,46 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), ProductActivity.class);
                 intent.putExtra("name", "hemnnes");
                 startActivity(intent);
+                overridePendingTransition(0,0);
             }
         });
 
         homebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "homebtn", Toast.LENGTH_SHORT).show();
-
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
+                overridePendingTransition(0,0);
             }
         });
 
         categorybtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "categorybtn", Toast.LENGTH_SHORT).show();
-
                 Intent intent = new Intent(getApplicationContext(), CategoryActivity.class);
                 startActivity(intent);
+                overridePendingTransition(0,0);
             }
         });
 
         shoplistbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "shoplistbtn", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), ShoplistActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
+                overridePendingTransition(0,0);
             }
         });
 
         loginbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "loginbtn", Toast.LENGTH_SHORT).show();
-
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
+                overridePendingTransition(0,0);
             }
         });
 
@@ -247,7 +278,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String searching = search.getText().toString();
-
                 Toast.makeText(MainActivity.this, searching, Toast.LENGTH_SHORT).show();
             }
         });
@@ -259,9 +289,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d("MainActivity", "onRestart");
 
         final int width = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 350, getResources().getDisplayMetrics());
-
         final int height = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200, getResources().getDisplayMetrics());
-
 
         if(list.size() != 0){
             non.setVisibility(View.GONE);
@@ -301,16 +329,15 @@ public class MainActivity extends AppCompatActivity {
                         Intent intent = new Intent(getApplicationContext(), ProductActivity.class);
                         intent.putExtra("name", imageButton.getTag().toString());
                         startActivity(intent);
+                        overridePendingTransition(0,0);
 
                     }catch (Exception e){
 
                     }
-
                 }
             });
 
             view.addView(imageButton);
-
         }
     }
 
@@ -325,6 +352,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause(){
         super.onPause();
         Log.d("MainActivity", "onPause");
+        //overridePendingTransition(0,0);
     }
 
     @Override

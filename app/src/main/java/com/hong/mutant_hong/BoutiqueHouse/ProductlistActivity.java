@@ -1,6 +1,7 @@
 package com.hong.mutant_hong.BoutiqueHouse;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -52,6 +53,11 @@ public class ProductlistActivity extends AppCompatActivity {
 
         ProductlistAdapter productlistAdapter = new ProductlistAdapter(productlist);
         productView.setAdapter(productlistAdapter);
+
+        homebtn.setBackgroundColor(Color.rgb(213,213,213));
+        categorybtn.setBackgroundColor(Color.rgb(160,186,237));
+        shoplistbtn.setBackgroundColor(Color.rgb(213,213,213));
+        loginbtn.setBackgroundColor(Color.rgb(213,213,213));
     }
 
     protected void onStart() {
@@ -60,11 +66,10 @@ public class ProductlistActivity extends AppCompatActivity {
         homebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ProductlistActivity.this, "homebtn", Toast.LENGTH_SHORT).show();
-
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
+                overridePendingTransition(0,0);
                 finish();
             }
         });
@@ -72,10 +77,9 @@ public class ProductlistActivity extends AppCompatActivity {
         categorybtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ProductlistActivity.this, "categorybtn", Toast.LENGTH_SHORT).show();
-
                 Intent intent = new Intent(getApplicationContext(), CategoryActivity.class);
                 startActivity(intent);
+                overridePendingTransition(0,0);
                 finish();
             }
         });
@@ -83,11 +87,10 @@ public class ProductlistActivity extends AppCompatActivity {
         shoplistbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ProductlistActivity.this, "shoplistbtn", Toast.LENGTH_SHORT).show();
-
                 Intent intent = new Intent(getApplicationContext(), ShoplistActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
+                overridePendingTransition(0,0);
                 finish();
             }
         });
@@ -95,12 +98,10 @@ public class ProductlistActivity extends AppCompatActivity {
         loginbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ProductlistActivity.this, "loginbtn", Toast.LENGTH_SHORT).show();
-
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
+                overridePendingTransition(0,0);
                 finish();
             }
         });

@@ -1,6 +1,7 @@
 package com.hong.mutant_hong.BoutiqueHouse;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -62,6 +63,11 @@ public class LoginActivity extends AppCompatActivity {
             loginlayout.setVisibility(View.GONE);
             logintrue.setVisibility(View.VISIBLE);
         }
+
+        homebtn.setBackgroundColor(Color.rgb(213,213,213));
+        categorybtn.setBackgroundColor(Color.rgb(213,213,213));
+        shoplistbtn.setBackgroundColor(Color.rgb(213,213,213));
+        loginbtn.setBackgroundColor(Color.rgb(160,186,237));
     }
 
     protected void onStart() {
@@ -72,40 +78,35 @@ public class LoginActivity extends AppCompatActivity {
         homebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(LoginActivity.this, "homebtn", Toast.LENGTH_SHORT).show();
-
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
+                overridePendingTransition(0,0);
             }
         });
 
         categorybtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(LoginActivity.this, "categorybtn", Toast.LENGTH_SHORT).show();
-
                 Intent intent = new Intent(getApplicationContext(), CategoryActivity.class);
                 startActivity(intent);
+                overridePendingTransition(0,0);
             }
         });
 
         shoplistbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(LoginActivity.this, "shoplistbtn", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), ShoplistActivity.class);
-
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
+                overridePendingTransition(0,0);
             }
         });
 
         loginbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(LoginActivity.this, "loginbtn", Toast.LENGTH_SHORT).show();
-
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
 
                 if(loginstate == false) {
@@ -117,6 +118,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 startActivity(intent);
+                overridePendingTransition(0,0);
             }
         });
 
@@ -165,14 +167,12 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
                 loginlayout.setVisibility(View.VISIBLE);
                 logintrue.setVisibility(View.GONE);
                 loginstate = false;
                 startActivity(intent);
-
             }
         });
     }
@@ -181,7 +181,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
         Log.d("LoginActivity", "onResume");
-
     }
 
     @Override
@@ -206,6 +205,5 @@ public class LoginActivity extends AppCompatActivity {
     protected void onRestart(){
         super.onRestart();
         Log.d("LoginActivity", "onRestart");
-
     }
 }

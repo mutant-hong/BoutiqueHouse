@@ -89,7 +89,6 @@ public class JoinActivity extends AppCompatActivity {
                     LoginManager.getInstance().logOut();
 
                     Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-
                     startActivity(intent);
                     finish();
                 }
@@ -100,17 +99,6 @@ public class JoinActivity extends AppCompatActivity {
                     Log.d("facebook", facebookstate.getText().toString());
                     Toast.makeText(JoinActivity.this, "본인인증 및 회원정보를 수정해주세요.", Toast.LENGTH_SHORT).show();
                 }
-                /*
-                else if(nouser == false && facebookstate.equals("인증 완료")){
-                    Toast.makeText(JoinActivity.this, "회원 정보를 수정해주세요.", Toast.LENGTH_SHORT).show();
-                }
-                else if(nouser == true && !facebookstate.equals("인증 완료")){
-                    Toast.makeText(JoinActivity.this, "본인인증이 되지 않았습니다.", Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    Toast.makeText(JoinActivity.this, "본인인증 및 회원정보를 수정해주세요.", Toast.LENGTH_SHORT).show();
-                }
-                */
 
             }
         });
@@ -144,8 +132,6 @@ public class JoinActivity extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
         Log.d("JoinActivity", "onResume");
-
-
     }
 
     @Override
@@ -170,6 +156,5 @@ public class JoinActivity extends AppCompatActivity {
     protected void onRestart(){
         super.onRestart();
         Log.d("JoinActivity", "onRestart");
-
     }
 }

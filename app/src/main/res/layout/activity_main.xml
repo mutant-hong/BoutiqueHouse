@@ -56,7 +56,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="이벤트상품"
-        android:textAlignment="center"/>
+        android:textAlignment="center"
+        android:id="@+id/prAtrribute"/>
 
     <HorizontalScrollView
         android:layout_width="match_parent"
