@@ -2,14 +2,12 @@ package com.hong.mutant_hong.BoutiqueHouse;
 
 import android.os.Bundle;
 import android.util.Log;
-
 import com.facebook.AccessToken;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
-
 import org.json.JSONObject;
 
 public class FacebookLogin implements FacebookCallback<LoginResult> {

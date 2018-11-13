@@ -1,7 +1,5 @@
 package com.hong.mutant_hong.BoutiqueHouse;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,11 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.facebook.CallbackManager;
 import com.facebook.login.LoginManager;
-import com.facebook.login.widget.LoginButton;
-
 import java.util.Arrays;
 
 public class JoinActivity extends AppCompatActivity {
@@ -32,7 +27,8 @@ public class JoinActivity extends AppCompatActivity {
     private FacebookLogin mLoginCallback;
     private CallbackManager mCallbackManager;
 
-    UserList userList;
+    SharedPreferences userPrefs;
+    SharedPreferences.Editor prefsEditor;
 
     boolean nouser = false;
 
@@ -48,16 +44,17 @@ public class JoinActivity extends AppCompatActivity {
 
         myfacebook_btn = (Button) findViewById(R.id.myfacebook_btn);
 
-        userID_confirm = (Button)findViewById(R.id.userID_confirm);
-        completebtn = (Button)findViewById(R.id.completebtn);
+        userID_confirm = (Button) findViewById(R.id.userID_confirm);
+        completebtn = (Button) findViewById(R.id.completebtn);
 
-        userID = (EditText)findViewById(R.id.userID);
-        userPW = (EditText)findViewById(R.id.userPW);
-        userPW_r = (EditText)findViewById(R.id.userPW_r);
+        userID = (EditText) findViewById(R.id.userID);
+        userPW = (EditText) findViewById(R.id.userPW);
+        userPW_r = (EditText) findViewById(R.id.userPW_r);
 
-        facebookstate = (TextView)findViewById(R.id.facebookstate);
+        facebookstate = (TextView) findViewById(R.id.facebookstate);
 
-        userList = new UserList();
+        userPrefs = getSharedPreferences("userPrefs", MODE_PRIVATE);
+        prefsEditor = userPrefs.edit();
     }
 
     @Override
@@ -83,10 +80,13 @@ public class JoinActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 if(nouser == true && userPW.getText().toString().equals(userPW_r.getText().toString()) && facebookstate.getText().toString().equals("인증 완료")){
-                    userList.userList.put(userID.getText().toString(), userPW.getText().toString());
 
                     //페북 인증 후 로그아웃
                     LoginManager.getInstance().logOut();
+
+                    //회원 정보 저장
+                    prefsEditor.putString(userID.getText().toString(), userPW.getText().toString());
+                    prefsEditor.commit();
 
                     Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                     startActivity(intent);
@@ -106,7 +106,7 @@ public class JoinActivity extends AppCompatActivity {
         userID_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(userList.userList.get(userID.getText().toString()) == null){
+                if(userPrefs.getString(userID.getText().toString(),"0").equals("0")){
                     nouser = true;
                     Toast.makeText(JoinActivity.this, "사용가능한 아이디입니다.", Toast.LENGTH_SHORT).show();
                 }

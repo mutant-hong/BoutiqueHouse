@@ -1,6 +1,7 @@
 package com.hong.mutant_hong.BoutiqueHouse;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,7 +12,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 
 public class ShoplistActivity extends AppCompatActivity {
@@ -29,6 +31,9 @@ public class ShoplistActivity extends AppCompatActivity {
     Button tointerior;
 
     int index = 0;
+
+    //로그인시 장바구니 동기화 한번만
+    static boolean userlistFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +62,8 @@ public class ShoplistActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         shoplistAdapter = new ShoplistAdapter(shoppinglist);
+
+        loginShoppingList();
 
         try{
             add(intent.getExtras().getString("name"), intent.getExtras().getInt("amount"));
@@ -133,6 +140,23 @@ public class ShoplistActivity extends AppCompatActivity {
         super.onNewIntent(intent);
 
         Log.d("ShoplistActivity", "onNewIntent");
+
+        //로그아웃하면 쇼핑리스트 리셋
+        if(LoginActivity.logout == true){
+            Log.d("로그아웃", "리스트 리셋");
+            shoppinglist.clear();
+            shoplistView.setAdapter(shoplistAdapter);
+
+            if(shoppinglist.isEmpty()){
+                listlayout.setVisibility(View.VISIBLE);
+                shoplistView.setVisibility(View.GONE);
+            }
+
+            LoginActivity.logout = false;
+        }
+
+        loginShoppingList();
+
         boolean same = false;
 
         try{
@@ -160,7 +184,7 @@ public class ShoplistActivity extends AppCompatActivity {
 
             shoplistView.setAdapter(shoplistAdapter);
 
-        }catch (Exception e){
+        }catch (Exception e) {
 
         }
 
@@ -217,6 +241,17 @@ public class ShoplistActivity extends AppCompatActivity {
 
         }
 
+        if(LoginActivity.loginstate == true){
+            SharedPreferences shopPrefs = getSharedPreferences("shoppinglist", MODE_PRIVATE);
+            SharedPreferences.Editor shopPrefs_Editor = shopPrefs.edit();
+            Gson gson = new Gson();
+
+            String json = gson.toJson(shoppinglist);
+            Log.d("user 쇼핑리스트 동기화", json);
+            shopPrefs_Editor.putString(LoginActivity.user, json);
+            shopPrefs_Editor.commit();
+        }
+
         if(!shoppinglist.isEmpty()){
             listlayout.setVisibility(View.GONE);
             shoplistView.setVisibility(View.VISIBLE);
@@ -241,6 +276,86 @@ public class ShoplistActivity extends AppCompatActivity {
             shoppinglist.set(index, new Product(R.drawable.hemnnes, "hemnnes", 289000, 154, 211, 188, "hot", amount));
 
         }
+
+        if(LoginActivity.loginstate == true){
+            SharedPreferences shopPrefs = getSharedPreferences("shoppinglist", MODE_PRIVATE);
+            SharedPreferences.Editor shopPrefs_Editor = shopPrefs.edit();
+            Gson gson = new Gson();
+
+            String json = gson.toJson(shoppinglist);
+            Log.d("user 쇼핑리스트 동기화", json);
+            shopPrefs_Editor.putString(LoginActivity.user, json);
+            shopPrefs_Editor.commit();
+        }
+
+        if(!shoppinglist.isEmpty()){
+            listlayout.setVisibility(View.GONE);
+            shoplistView.setVisibility(View.VISIBLE);
+        }
     }
 
+    private void loginShoppingList(){
+
+        if(LoginActivity.loginstate == true && userlistFlag == false){
+
+            Log.d("loginShoppingList", "ㅇㅇ");
+            SharedPreferences shopPrefs = getSharedPreferences("shoppinglist", MODE_PRIVATE);
+            SharedPreferences.Editor shopPrefs_Editor = shopPrefs.edit();
+
+            String jsonShoppingList = shopPrefs.getString(LoginActivity.user, "0");
+            Log.d("user 쇼핑리스트", jsonShoppingList);
+            Gson gson = new Gson();
+
+            //회원의 장바구니 비어있지않음
+            if(!jsonShoppingList.equals("0")){
+                Log.d("회원의 장바구니 비어있지않음", "dd");
+
+                ArrayList<Product> arrayList = gson.fromJson(jsonShoppingList, new TypeToken<ArrayList<Product>>(){}.getType());
+
+                //로그인 전 장바구니와 로그인 상태일 때 저장된 장바구니 합치기
+                if(!shoppinglist.isEmpty()) {
+
+                    boolean same = false;
+
+                    for (int i = 0; i < arrayList.size(); i++) {
+
+                        for (int j = 0; j < shoppinglist.size(); j++) {
+
+                            if (arrayList.get(i).name.equals(shoppinglist.get(j).name)) {
+                                //같은 아이템이 있을때 장바구니 업데이트
+
+                                int amount = shoppinglist.get(j).amount + arrayList.get(i).amount;
+                                set(j, shoppinglist.get(j).name, amount);
+
+                                same = true;
+                                break;
+                            }
+
+                            else{
+                                same = false;
+                            }
+                        }
+                        //같은 아이템 없을때, 장바구니에 추가
+                        if(same == false){
+                            add(arrayList.get(i).name, arrayList.get(i).amount);
+                        }
+                    }
+                }
+                //로그인전 장바구니가 비어있다면
+                else{
+                    for (int i = 0; i < arrayList.size(); i++) {
+                        add(arrayList.get(i).name, arrayList.get(i).amount);
+                    }
+                }
+            }
+
+            String json = gson.toJson(shoppinglist);
+            Log.d("user 쇼핑리스트 동기화", json);
+            shopPrefs_Editor.putString(LoginActivity.user, json);
+            shopPrefs_Editor.commit();
+
+            shoplistView.setAdapter(shoplistAdapter);
+            userlistFlag = true;
+        }
+    }
 }

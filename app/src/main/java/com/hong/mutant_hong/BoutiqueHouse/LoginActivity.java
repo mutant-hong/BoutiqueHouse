@@ -1,6 +1,7 @@
 package com.hong.mutant_hong.BoutiqueHouse;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,8 +12,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.facebook.login.LoginManager;
+import com.google.gson.Gson;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -28,9 +28,13 @@ public class LoginActivity extends AppCompatActivity {
 
     TextView userName;
 
-    UserList userList;
+    SharedPreferences userPrefs;
+    SharedPreferences loginState;
 
     static boolean loginstate = false;
+    static String user;
+
+    static boolean logout = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,11 +61,19 @@ public class LoginActivity extends AppCompatActivity {
 
         userName = (TextView)findViewById(R.id.userName);
 
-        userList = new UserList();
+        userPrefs = getSharedPreferences("userPrefs", MODE_PRIVATE);
+        loginState = getSharedPreferences("loginState", MODE_PRIVATE);
 
         if(loginstate == true) {
             loginlayout.setVisibility(View.GONE);
             logintrue.setVisibility(View.VISIBLE);
+
+            String login = loginState.getString("login","0");
+
+            if(!login.equals("0")){
+                userName.setText(loginState.getString("login","0"));
+                user = login;
+            }
         }
 
         homebtn.setBackgroundColor(Color.rgb(213,213,213));
@@ -125,32 +137,43 @@ public class LoginActivity extends AppCompatActivity {
         tologin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String userInfo = userPrefs.getString(userid.getText().toString(),"0");
 
-                if(userList.userList.isEmpty()){
-                    Log.d("userList size", "0");
-                    Toast.makeText(LoginActivity.this, "로그인 실패", Toast.LENGTH_SHORT).show();
+                //로그인 실패
+                if(userInfo.equals("0")){
+                    Toast.makeText(LoginActivity.this, "아이디 또는 패스워드가 맞지않습니다.", Toast.LENGTH_SHORT).show();
                 }
-                try {
-                    //회원이 아닌경우
-                    if(userList.userList.get(userid.getText().toString()) == null){
-                        Toast.makeText(LoginActivity.this, "로그인 실패", Toast.LENGTH_SHORT).show();
-                    }
-                    //아이디, 비밀번호 틀린경우
+                else if(userInfo.equals(userpw.getText().toString())){
+                    loginstate = true;
+                    userName.setText(userid.getText());
+                    user = userid.getText().toString();
+                    loginlayout.setVisibility(View.GONE);
+                    logintrue.setVisibility(View.VISIBLE);
 
-                    if(!userList.userList.get(userid.getText().toString()).equals(userpw.getText().toString())){
-                        Toast.makeText(LoginActivity.this, " 비밀번호가 맞지않습니다.", Toast.LENGTH_SHORT).show();
-                    }
-                    //로그인 성공
-                    else{
-                        loginstate = true;
-                        userName.setText(userid.getText());
-                        loginlayout.setVisibility(View.GONE);
-                        logintrue.setVisibility(View.VISIBLE);
-                    }
-                }catch (Exception e){
+                    //로그아웃 전까지 자동 로그인
+                    SharedPreferences.Editor editor = loginState.edit();
+                    editor.putString("login", userid.getText().toString());
+                    editor.commit();
 
+                    /*
+                    //로그인 시 장바구니 동기화
+                    try {
+
+                        if(!ShoplistActivity.shoppinglist.isEmpty()){
+                            SharedPreferences shopPrefs = getSharedPreferences("shoppinglist", MODE_PRIVATE);
+                            SharedPreferences.Editor shopPrefs_Editor = shopPrefs.edit();
+                            Gson gson = new Gson();
+                            String jsonShoppingList = gson.toJson(ShoplistActivity.shoppinglist);
+                            Log.d("쇼핑리스트", jsonShoppingList);
+                            shopPrefs_Editor.putString(user, jsonShoppingList);
+                            shopPrefs_Editor.commit();
+                        }
+
+                    }catch (Exception e){
+
+                    }
+                    */
                 }
-
             }
         });
 
@@ -172,6 +195,24 @@ public class LoginActivity extends AppCompatActivity {
                 loginlayout.setVisibility(View.VISIBLE);
                 logintrue.setVisibility(View.GONE);
                 loginstate = false;
+
+                SharedPreferences.Editor editor = loginState.edit();
+                editor.clear();
+                editor.commit();
+
+                logout = true;
+
+                SharedPreferences shopPrefs = getSharedPreferences("shoppinglist", MODE_PRIVATE);
+                SharedPreferences.Editor shopPrefs_Editor = shopPrefs.edit();
+                Gson gson = new Gson();
+
+                String json = gson.toJson(ShoplistActivity.shoppinglist);
+                Log.d("user 쇼핑리스트 동기화", json);
+                shopPrefs_Editor.putString(LoginActivity.user, json);
+                shopPrefs_Editor.commit();
+
+                ShoplistActivity.userlistFlag = false;
+
                 startActivity(intent);
             }
         });

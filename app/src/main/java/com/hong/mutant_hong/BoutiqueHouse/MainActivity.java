@@ -2,11 +2,13 @@ package com.hong.mutant_hong.BoutiqueHouse;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.graphics.Color;
-import android.graphics.ColorSpace;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -14,7 +16,6 @@ import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
@@ -23,7 +24,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import java.io.File;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 
@@ -41,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     int cnt=0;
     LinearLayout view;
     ImageView non;
+
+    SQLiteDatabase sqliteDB;
 
     private Context mContext;
     @Override
@@ -93,6 +96,20 @@ public class MainActivity extends AppCompatActivity {
 
         getHashKey(mContext);
 
+        try {
+            SharedPreferences loginState = getSharedPreferences("loginState", MODE_PRIVATE);
+            SharedPreferences userPrefs = getSharedPreferences("userPrefs", MODE_PRIVATE);
+            String login = loginState.getString("login", "0");
+
+            if(!userPrefs.getString(login,"0").equals("0")){
+                Log.d("자동로그인","성공");
+                LoginActivity.user = userPrefs.getString(login,"0");
+                LoginActivity.loginstate = true;
+            }
+        }catch (Exception e){
+
+        }
+
     }
     @Nullable
 
@@ -144,7 +161,36 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private SQLiteDatabase init_database() {
+        SQLiteDatabase db = null ;
+        // File file = getDatabasePath("contact.db") ;
+        File file = new File(getFilesDir(), "contact.db");
+        System.out.println("PATH : " + file.toString());
 
+        try {
+            db = SQLiteDatabase.openOrCreateDatabase(file, null);
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+        }
+
+        if (db == null) {
+            System.out.println("DB creation failed. " + file.getAbsolutePath());
+        }
+
+        return db;
+    }
+
+    private void init_tables() {
+        if (sqliteDB != null) {
+            String sqlCreateTbl = "CREATE TABLE IF NOT EXISTS CONTACT_T (" +
+                    "ID " + "TEXT," +
+                    "PW " + "TEXT," +
+                    "FACEBOOK " + "TEXT" + ")";
+            System.out.println(sqlCreateTbl);
+
+            sqliteDB.execSQL(sqlCreateTbl);
+        }
+    }
 
     @Override
     protected void onStart(){
