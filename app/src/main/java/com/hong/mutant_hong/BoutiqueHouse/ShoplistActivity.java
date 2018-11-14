@@ -35,6 +35,8 @@ public class ShoplistActivity extends AppCompatActivity {
     //로그인시 장바구니 동기화 한번만
     static boolean userlistFlag = false;
 
+    //장바구니 수정 삭제
+    static boolean changeItem = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +54,13 @@ public class ShoplistActivity extends AppCompatActivity {
         listlayout = (LinearLayout)findViewById(R.id.listlayout);
 
         shoplistView = (RecyclerView)findViewById(R.id.ShoplistView);
+        tointerior = (Button)findViewById(R.id.tointerior);
+
+        homebtn.setBackgroundColor(Color.rgb(213,213,213));
+        categorybtn.setBackgroundColor(Color.rgb(213,213,213));
+        shoplistbtn.setBackgroundColor(Color.rgb(160,186,237));
+        loginbtn.setBackgroundColor(Color.rgb(213,213,213));
+
         shoplistView.setHasFixedSize(true);
 
         layoutManager = new LinearLayoutManager(this);
@@ -72,20 +81,13 @@ public class ShoplistActivity extends AppCompatActivity {
         }catch (Exception e){
 
         }
-
-        tointerior = (Button)findViewById(R.id.tointerior);
-
-        homebtn.setBackgroundColor(Color.rgb(213,213,213));
-        categorybtn.setBackgroundColor(Color.rgb(213,213,213));
-        shoplistbtn.setBackgroundColor(Color.rgb(160,186,237));
-        loginbtn.setBackgroundColor(Color.rgb(213,213,213));
-
     }
 
     protected void onStart() {
         super.onStart();
 
         Log.d("ShoplistActivity", "onStart");
+
 
         tointerior.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,6 +142,11 @@ public class ShoplistActivity extends AppCompatActivity {
         super.onNewIntent(intent);
 
         Log.d("ShoplistActivity", "onNewIntent");
+        
+        if(shoppinglist.isEmpty()){
+            listlayout.setVisibility(View.VISIBLE);
+            shoplistView.setVisibility(View.GONE);
+        }
 
         //로그아웃하면 쇼핑리스트 리셋
         if(LoginActivity.logout == true){
@@ -188,6 +195,23 @@ public class ShoplistActivity extends AppCompatActivity {
 
         }
 
+        if(changeItem == true){
+            Log.d("아이템 수정", "수정적용");
+
+            if(LoginActivity.loginstate == true){
+                SharedPreferences shopPrefs = getSharedPreferences("shoppinglist", MODE_PRIVATE);
+                SharedPreferences.Editor shopPrefs_Editor = shopPrefs.edit();
+                Gson gson = new Gson();
+
+                String json = gson.toJson(shoppinglist);
+                Log.d("user 쇼핑리스트 동기화", json);
+                shopPrefs_Editor.putString(LoginActivity.user, json);
+                shopPrefs_Editor.commit();
+            }
+
+            changeItem = false;
+        }
+
     }
 
     @Override
@@ -201,7 +225,6 @@ public class ShoplistActivity extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
         Log.d("ShoplistActivity", "onResume");
-
     }
 
     @Override
@@ -357,5 +380,9 @@ public class ShoplistActivity extends AppCompatActivity {
             shoplistView.setAdapter(shoplistAdapter);
             userlistFlag = true;
         }
+    }
+
+    public static void changeItem(){
+        //changeItem = true;
     }
 }

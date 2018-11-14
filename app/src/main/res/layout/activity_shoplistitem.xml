@@ -3,34 +3,78 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="80dp">
 
-    <ImageView
-        android:layout_width="80dp"
-        android:layout_height="match_parent"
-        android:id="@+id/prImg"/>
-
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_weight="1">
+        android:orientation="horizontal"
+        android:id="@+id/productitem">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:id="@+id/prName"/>
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:id="@+id/prImg"
+            android:scaleType="fitXY"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:id="@+id/prPrice"/>
+        <LinearLayout
+            android:layout_marginLeft="10dp"
+            android:layout_width="170dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="20dp"
+                android:id="@+id/prName"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="20dp"
+                android:id="@+id/prPrice"/>
+        </LinearLayout>
     </LinearLayout>
 
-    <TextView
-        android:layout_width="80dp"
+    <EditText
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_weight="1"
         android:textAlignment="center"
+        android:textSize="20dp"
+        android:background="@drawable/test"
+        android:gravity="center_vertical"
+        android:visibility="gone"
+        android:id="@+id/changeAmount"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:background="@drawable/test"
         android:gravity="center_vertical"
         android:id="@+id/prAmount"/>
+
+    <Button
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:text="완료"
+        android:textAlignment="center"
+        android:background="#FFFFFF"
+        android:layout_gravity="right"
+        android:visibility="gone"
+        android:id="@+id/changebtn"/>
+
+    <Button
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:text="x"
+        android:textAlignment="center"
+        android:background="#FFFFFF"
+        android:layout_gravity="right"
+        android:id="@+id/delbtn"/>
+
 </LinearLayout>

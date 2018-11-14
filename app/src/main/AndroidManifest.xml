@@ -40,6 +40,7 @@
 
         <activity android:name="com.hong.mutant_hong.BoutiqueHouse.ShoplistActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="adjustPan|adjustResize"
             android:configChanges="orientation|screenSize"/>
 
         <activity android:name="com.hong.mutant_hong.BoutiqueHouse.LoginActivity"
