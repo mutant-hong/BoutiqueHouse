@@ -23,6 +23,7 @@
         <activity
             android:name="com.hong.mutant_hong.BoutiqueHouse.MainActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="adjustPan|adjustResize"
             android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -59,6 +60,11 @@
 
         <activity android:name="com.hong.mutant_hong.BoutiqueHouse.InteriorActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:configChanges="orientation|screenSize"/>
+
+        <activity android:name=".SearchActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="adjustPan|adjustResize"
             android:configChanges="orientation|screenSize"/>
 
     </application>

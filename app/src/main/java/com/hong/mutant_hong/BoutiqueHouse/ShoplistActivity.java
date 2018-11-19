@@ -142,7 +142,7 @@ public class ShoplistActivity extends AppCompatActivity {
         super.onNewIntent(intent);
 
         Log.d("ShoplistActivity", "onNewIntent");
-        
+
         if(shoppinglist.isEmpty()){
             listlayout.setVisibility(View.VISIBLE);
             shoplistView.setVisibility(View.GONE);

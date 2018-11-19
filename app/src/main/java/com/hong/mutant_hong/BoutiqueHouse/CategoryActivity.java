@@ -39,6 +39,15 @@ public class CategoryActivity extends AppCompatActivity {
         categorylist = new ArrayList<>();
         categorylist.add(new Category("쇼파"));
         categorylist.add(new Category("침대"));
+        categorylist.add(new Category("의자"));
+        categorylist.add(new Category("수납"));
+        categorylist.add(new Category("테이블"));
+        categorylist.add(new Category("책상"));
+        categorylist.add(new Category("주방가구"));
+        categorylist.add(new Category("욕실가구"));
+        categorylist.add(new Category("조명"));
+        categorylist.add(new Category("러그"));
+        categorylist.add(new Category("커튼"));
 
         CategoryAdapter categoryAdapter = new CategoryAdapter(categorylist);
         category.setAdapter(categoryAdapter);

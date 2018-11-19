@@ -28,117 +28,35 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
-        <Button
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="1."
+            android:textSize="15dp"
+            android:id="@+id/num"/>
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="event"
-            android:id="@+id/eventbtn"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="new"
-            android:id="@+id/newbtn"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="hot"
-            android:id="@+id/hotbtn"/>
+            android:gravity="center"
+            android:text="contents"
+            android:textSize="15dp"
+            android:id="@+id/prName"/>
 
     </LinearLayout>
 
-    <TextView
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="이벤트상품"
-        android:textAlignment="center"
-        android:id="@+id/prAtrribute"/>
+        android:id="@+id/searchitem">
 
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="visible"
-        android:id="@+id/eventlayout">
+    </android.support.v7.widget.RecyclerView>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:layout_width="350dp"
-                android:layout_height="200dp"
-                android:scaleType="fitXY"
-                android:background="#FFFFFF"
-                android:src="@drawable/tarva"
-                android:id="@+id/tarvabtn"/>
-        </LinearLayout>
-
-    </HorizontalScrollView>
-
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:id="@+id/newlayout">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:layout_width="350dp"
-                android:layout_height="200dp"
-                android:scaleType="fitXY"
-                android:background="#FFFFFF"
-                android:src="@drawable/landskrona"
-                android:id="@+id/landskronabtn"/>
-            <ImageButton
-                android:layout_width="350dp"
-                android:layout_height="200dp"
-                android:scaleType="fitXY"
-                android:background="#FFFFFF"
-                android:src="@drawable/kivik"
-                android:id="@+id/kivikbtn"/>
-
-        </LinearLayout>
-    </HorizontalScrollView>
-
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:id="@+id/hotlayout">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:layout_width="350dp"
-                android:layout_height="200dp"
-                android:scaleType="fitXY"
-                android:background="#FFFFFF"
-                android:src="@drawable/hemnnes"
-                android:id="@+id/hemnnesbtn" />
-        </LinearLayout>
-    </HorizontalScrollView>
-
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="최근본상품"
-        android:textAlignment="center"/>
-
-    <HorizontalScrollView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1">
@@ -146,21 +64,143 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:id="@+id/view">
+            android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="350dp"
-                android:layout_height="200dp"
-                android:src="@drawable/sample"
-                android:scaleType="fitXY"
-                android:background="#FFFFFF"
-                android:id="@+id/non" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="event"
+                    android:id="@+id/eventbtn"/>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="new"
+                    android:id="@+id/newbtn"/>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="hot"
+                    android:id="@+id/hotbtn"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="이벤트상품"
+                android:textAlignment="center"
+                android:id="@+id/prAtrribute"/>
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                android:id="@+id/eventlayout">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:layout_width="350dp"
+                        android:layout_height="200dp"
+                        android:scaleType="fitXY"
+                        android:background="#FFFFFF"
+                        android:src="@drawable/tarva"
+                        android:id="@+id/tarvabtn"/>
+                </LinearLayout>
+
+            </HorizontalScrollView>
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:id="@+id/newlayout">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:layout_width="350dp"
+                        android:layout_height="200dp"
+                        android:scaleType="fitXY"
+                        android:background="#FFFFFF"
+                        android:src="@drawable/landskrona"
+                        android:id="@+id/landskronabtn"/>
+                    <ImageButton
+                        android:layout_width="350dp"
+                        android:layout_height="200dp"
+                        android:scaleType="fitXY"
+                        android:background="#FFFFFF"
+                        android:src="@drawable/kivik"
+                        android:id="@+id/kivikbtn"/>
+
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:id="@+id/hotlayout">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:layout_width="350dp"
+                        android:layout_height="200dp"
+                        android:scaleType="fitXY"
+                        android:background="#FFFFFF"
+                        android:src="@drawable/hemnnes"
+                        android:id="@+id/hemnnesbtn" />
+                </LinearLayout>
+            </HorizontalScrollView>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="최근본상품"
+                android:textAlignment="center"/>
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/view">
+
+                    <ImageView
+                        android:layout_width="350dp"
+                        android:layout_height="200dp"
+                        android:src="@drawable/sample"
+                        android:scaleType="fitXY"
+                        android:background="#FFFFFF"
+                        android:id="@+id/non" />
+
+                </LinearLayout>
+
+            </HorizontalScrollView>
         </LinearLayout>
-
-
-    </HorizontalScrollView>
+    </ScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"

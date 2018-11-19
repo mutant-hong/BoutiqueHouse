@@ -6,12 +6,14 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
@@ -24,7 +26,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import java.io.File;
+
 import java.security.MessageDigest;
 import java.util.ArrayList;
 
@@ -43,7 +45,16 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout view;
     ImageView non;
 
-    SQLiteDatabase sqliteDB;
+    RecyclerView searchitem;
+    RecyclerView.LayoutManager layoutManager;
+    static ArrayList<String> searchlist;
+    ArrayList<String> showsearchlist;
+
+    TextView num, prName;
+    Thread th;
+    Handler han;
+    int count = 0;
+    boolean threadflag = true;
 
     private Context mContext;
     @Override
@@ -80,6 +91,26 @@ public class MainActivity extends AppCompatActivity {
         view = (LinearLayout) findViewById(R.id.view);
         list = new ArrayList<>();
 
+        searchitem = (RecyclerView)findViewById(R.id.searchitem);
+        searchitem.setHasFixedSize(true);
+
+        layoutManager = new LinearLayoutManager(this);
+        searchitem.setLayoutManager(layoutManager);
+
+        searchlist = new ArrayList<>();
+        searchlist.add("landskrona");
+        searchlist.add("kivik");
+        searchlist.add("klippan");
+        searchlist.add("hemnnes");
+        searchlist.add("tarva");
+        searchlist.add("songesand");
+        searchlist.add("renberget");
+        searchlist.add("janinge");
+        searchlist.add("kaustby");
+
+        SearchlistAdapter hotitemAdapter = new SearchlistAdapter(showsearchlist);
+        //hotitem.setAdapter(hotitemAdapter);
+
         eventbtn.setFocusableInTouchMode(true);
         eventbtn.requestFocus();
 
@@ -110,6 +141,8 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+        num = (TextView)findViewById(R.id.num);
+        prName = (TextView)findViewById(R.id.prName);
     }
     @Nullable
 
@@ -159,37 +192,6 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-    }
-
-    private SQLiteDatabase init_database() {
-        SQLiteDatabase db = null ;
-        // File file = getDatabasePath("contact.db") ;
-        File file = new File(getFilesDir(), "contact.db");
-        System.out.println("PATH : " + file.toString());
-
-        try {
-            db = SQLiteDatabase.openOrCreateDatabase(file, null);
-        } catch (SQLiteException e) {
-            e.printStackTrace();
-        }
-
-        if (db == null) {
-            System.out.println("DB creation failed. " + file.getAbsolutePath());
-        }
-
-        return db;
-    }
-
-    private void init_tables() {
-        if (sqliteDB != null) {
-            String sqlCreateTbl = "CREATE TABLE IF NOT EXISTS CONTACT_T (" +
-                    "ID " + "TEXT," +
-                    "PW " + "TEXT," +
-                    "FACEBOOK " + "TEXT" + ")";
-            System.out.println(sqlCreateTbl);
-
-            sqliteDB.execSQL(sqlCreateTbl);
-        }
     }
 
     @Override
@@ -324,7 +326,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String searching = search.getText().toString();
-                Toast.makeText(MainActivity.this, searching, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
+                intent.putExtra("search", searching);
+                startActivity(intent);
             }
         });
 
@@ -333,6 +337,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestart(){
         super.onRestart();
         Log.d("MainActivity", "onRestart");
+
+        threadflag = true;
 
         final int width = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 350, getResources().getDisplayMetrics());
         final int height = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200, getResources().getDisplayMetrics());
@@ -392,6 +398,53 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         Log.d("MainActivity", "onResume");
 
+        //핸들러 순위, 제품명 set
+        han = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+
+                if(searchlist.size() < msg.arg1+1){
+                    num.setText(Integer.toString(msg.arg1+1));
+                    prName.setText("null");
+                }
+                else {
+                    num.setText(Integer.toString(msg.arg1 + 1));
+                    prName.setText(searchlist.get(msg.arg1));
+                }
+            }
+        };
+
+        //스레드 1~9까지 1초마다 ++
+        th = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (threadflag) {
+                    try {
+                        Log.d("스레드", "running");
+                        Message msg = han.obtainMessage();
+
+                        msg.arg1 = count;
+                        han.sendMessage(msg);
+                        count++;
+
+                        Thread.sleep(1000);
+
+                        //count 초기화 -> 처음부터 계속 반복
+                        if(count == 10)
+                            count = 0;
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }finally {
+                        Log.d("스레드", "stop");
+                    }
+                }
+            }
+        });
+        th.start();
+
+
     }
 
     @Override
@@ -399,6 +452,9 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         Log.d("MainActivity", "onPause");
         //overridePendingTransition(0,0);
+
+        threadflag = false;
+        Log.d("스레드", "interrupted");
     }
 
     @Override
@@ -411,5 +467,6 @@ public class MainActivity extends AppCompatActivity {
     public void onDestroy() {
         super.onDestroy();
         Log.d("MainActivity", "onDestroy");
+
     }
 }

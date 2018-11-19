@@ -20,4 +20,8 @@ public class Product {
         this.attribute = attribute;
         this.amount = amount;
     }
+
+    public Product(String name){
+        this.name = name;
+    }
 }
