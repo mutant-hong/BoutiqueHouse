@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 28
@@ -33,4 +34,5 @@ dependencies {
 
     api 'com.facebook.android:facebook-android-sdk:4.36.1'
     implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'com.google.firebase:firebase-database:16.0.1'
 }

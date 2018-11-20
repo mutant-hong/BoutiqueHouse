@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,10 +26,16 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,16 +52,21 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout view;
     ImageView non;
 
+    Button up, down;
+
     RecyclerView searchitem;
     RecyclerView.LayoutManager layoutManager;
-    static ArrayList<String> searchlist;
+    static ArrayList<Search> searchlist;
     ArrayList<String> showsearchlist;
 
-    TextView num, prName;
+    TextView num, prName, top10;
     Thread th;
     Handler han;
     int count = 0;
     boolean threadflag = true;
+
+    DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+    DatabaseReference conditionRef = mRootRef.child("search");
 
     private Context mContext;
     @Override
@@ -89,6 +101,14 @@ public class MainActivity extends AppCompatActivity {
 
         non = (ImageView)findViewById(R.id.non);
         view = (LinearLayout) findViewById(R.id.view);
+
+        num = (TextView)findViewById(R.id.num);
+        prName = (TextView)findViewById(R.id.prName);
+        top10 = (TextView)findViewById(R.id.top10);
+
+        up = (Button) findViewById(R.id.up);
+        down = (Button) findViewById(R.id.down);
+
         list = new ArrayList<>();
 
         searchitem = (RecyclerView)findViewById(R.id.searchitem);
@@ -98,18 +118,8 @@ public class MainActivity extends AppCompatActivity {
         searchitem.setLayoutManager(layoutManager);
 
         searchlist = new ArrayList<>();
-        searchlist.add("landskrona");
-        searchlist.add("kivik");
-        searchlist.add("klippan");
-        searchlist.add("hemnnes");
-        searchlist.add("tarva");
-        searchlist.add("songesand");
-        searchlist.add("renberget");
-        searchlist.add("janinge");
-        searchlist.add("kaustby");
 
-        SearchlistAdapter hotitemAdapter = new SearchlistAdapter(showsearchlist);
-        //hotitem.setAdapter(hotitemAdapter);
+        showsearchlist = new ArrayList<>();
 
         eventbtn.setFocusableInTouchMode(true);
         eventbtn.requestFocus();
@@ -140,9 +150,6 @@ public class MainActivity extends AppCompatActivity {
         }catch (Exception e){
 
         }
-
-        num = (TextView)findViewById(R.id.num);
-        prName = (TextView)findViewById(R.id.prName);
     }
     @Nullable
 
@@ -197,6 +204,80 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart(){
         super.onStart();
+
+        //파이어베이스 데이터 불러오기
+        conditionRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                if(!searchlist.isEmpty())
+                    searchlist.clear();
+
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+                    Log.d("data", snapshot.getKey() + " " + snapshot.getValue().toString());
+
+                    searchlist.add(new Search(snapshot.getKey(), Integer.parseInt(snapshot.getValue().toString())));
+                }
+
+                Collections.sort(searchlist);
+
+                Log.d("size", Integer.toString(searchlist.size()));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        //실검 1~10까지 리스트형식으로
+
+        down.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                num.setVisibility(View.GONE);
+                prName.setVisibility(View.GONE);
+                top10.setVisibility(View.VISIBLE);
+
+                if(showsearchlist.isEmpty()) {
+                    for (int i = 0; i < searchlist.size() && i < 10; i++) {
+                        showsearchlist.add(searchlist.get(i).category);
+                    }
+                }
+
+                SearchlistAdapter searchlistAdapter = new SearchlistAdapter(showsearchlist);
+                searchitem.setAdapter(searchlistAdapter);
+
+                searchitem.setVisibility(View.VISIBLE);
+                up.setVisibility(View.VISIBLE);
+                down.setVisibility(View.GONE);
+
+                threadflag = false;
+            }
+        });
+
+        //리스트 숨기기
+
+        up.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                num.setVisibility(View.VISIBLE);
+                prName.setVisibility(View.VISIBLE);
+                top10.setVisibility(View.GONE);
+
+                showsearchlist.clear();
+
+                searchitem.setVisibility(View.GONE);
+                up.setVisibility(View.GONE);
+                down.setVisibility(View.VISIBLE);
+
+                threadflag = true;
+
+                searchTop10Thread();
+            }
+        });
 
         eventbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -377,7 +458,6 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View v) {
 
                     try {
-                        Toast.makeText(MainActivity.this, list.get(imageButton.getId()).toString(), Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(), ProductActivity.class);
                         intent.putExtra("name", imageButton.getTag().toString());
                         startActivity(intent);
@@ -398,52 +478,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         Log.d("MainActivity", "onResume");
 
-        //핸들러 순위, 제품명 set
-        han = new Handler(){
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-
-                if(searchlist.size() < msg.arg1+1){
-                    num.setText(Integer.toString(msg.arg1+1));
-                    prName.setText("null");
-                }
-                else {
-                    num.setText(Integer.toString(msg.arg1 + 1));
-                    prName.setText(searchlist.get(msg.arg1));
-                }
-            }
-        };
-
-        //스레드 1~9까지 1초마다 ++
-        th = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (threadflag) {
-                    try {
-                        Log.d("스레드", "running");
-                        Message msg = han.obtainMessage();
-
-                        msg.arg1 = count;
-                        han.sendMessage(msg);
-                        count++;
-
-                        Thread.sleep(1000);
-
-                        //count 초기화 -> 처음부터 계속 반복
-                        if(count == 10)
-                            count = 0;
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }finally {
-                        Log.d("스레드", "stop");
-                    }
-                }
-            }
-        });
-        th.start();
-
+        searchTop10Thread();
 
     }
 
@@ -467,6 +502,55 @@ public class MainActivity extends AppCompatActivity {
     public void onDestroy() {
         super.onDestroy();
         Log.d("MainActivity", "onDestroy");
+
+    }
+
+    public void searchTop10Thread(){
+        //핸들러 순위, 제품명 set
+        han = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+
+                if(searchlist.size() < msg.arg1+1){
+                    num.setText(Integer.toString(msg.arg1+1));
+                    prName.setText("null");
+                }
+                else {
+                    num.setText(Integer.toString(msg.arg1 + 1));
+                    prName.setText(searchlist.get(msg.arg1).category);
+                }
+            }
+        };
+
+        //스레드 1~9까지 1초마다 ++
+        th = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (threadflag) {
+                    try {
+                        Log.d("스레드", "running");
+                        Message msg = han.obtainMessage();
+
+                        msg.arg1 = count;
+                        han.sendMessage(msg);
+                        count++;
+
+                        Thread.sleep(2000);
+
+                        //count 초기화 -> 처음부터 계속 반복
+                        if(count == 10)
+                            count = 0;
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }finally {
+                        Log.d("스레드", "stop");
+                    }
+                }
+            }
+        });
+        th.start();
 
     }
 }
