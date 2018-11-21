@@ -2,13 +2,25 @@ package com.hong.mutant_hong.BoutiqueHouse;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class ProductActivity extends AppCompatActivity {
 
@@ -17,6 +29,13 @@ public class ProductActivity extends AppCompatActivity {
     ImageView img;
     String name;
     int amount = 1;
+
+    //제품 추천 리스트
+    TextView recommendText;
+    RecyclerView recommendView;
+    RecyclerView.LayoutManager layoutManager;
+    static ArrayList<Product> userRecommend;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,9 +51,27 @@ public class ProductActivity extends AppCompatActivity {
         up = (Button) findViewById(R.id.up);
         down = (Button) findViewById(R.id.down);
 
+        recommendText = (TextView)findViewById(R.id.recommendText);
+
+        recommendView = (RecyclerView) findViewById(R.id.recommendView);
+        recommendView.setHasFixedSize(true);
+
+        layoutManager = new LinearLayoutManager(this);
+        recommendView.setLayoutManager(layoutManager);
+
+        userRecommend = new ArrayList<>();
+
         Intent intent = getIntent();
         name = intent.getExtras().getString("name");
 
+        new Product().productInfo();
+
+
+        img.setImageResource(Product.productInfolist.get(name).drawableId);
+        prName.setText(Product.productInfolist.get(name).name);
+        prPrice.setText("￦ " + Integer.toString(Product.productInfolist.get(name).price) + "/개");
+
+        /*
         if(name.equals("landskrona")){
             img.setImageResource(R.drawable.landskrona);
             prName.setText(name);
@@ -55,6 +92,7 @@ public class ProductActivity extends AppCompatActivity {
             prName.setText(name);
             prPrice.setText("1999000");
         }
+        */
 
         if(MainActivity.list.size() == 0){
             Log.d("productfirst", "add");
@@ -114,4 +152,27 @@ public class ProductActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+
+        if(LoginActivity.loginstate) {
+            recommendText.setVisibility(View.VISIBLE);
+            recommendView.setVisibility(View.VISIBLE);
+
+            recommend recommend = new recommend(LoginActivity.user);
+            recommend.readData();
+
+            ProductlistAdapter productlistAdapter = new ProductlistAdapter(userRecommend);
+            recommendView.setAdapter(productlistAdapter);
+        }
+
+        else{
+            recommendText.setVisibility(View.GONE);
+            recommendView.setVisibility(View.GONE);
+        }
+    }
+
+
 }

@@ -5,52 +5,83 @@ import android.content.ClipDescription;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
-
 import java.util.ArrayList;
 
 public class InteriorActivity extends AppCompatActivity implements View.OnTouchListener {
 
     LinearLayout listArea;
     RelativeLayout interiorArea;
+    Button createroom;
 
-    boolean move = false;
+    static boolean move = false;
 
     private static final String IMAGEVIEW_TAG = "드래그 이미지";
 
     int index = 0;
     ArrayList<String> viewID_List;
 
+    //방 크기
+    static int x,y,z;
+
+    int deviceWidth;
+
+    CreateRoom createRoom;
+
     @Override
     protected void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
         setContentView(R.layout.activity_interior);
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        //getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        float cm = 120;
+
+        metrics = getApplicationContext().getResources().getDisplayMetrics();
+
+
+        Log.d("dpi", ""+metrics.widthPixels + " , " + metrics.heightPixels + ", " + metrics.densityDpi);
+
+        deviceWidth = metrics.widthPixels * 160 / metrics.densityDpi;
 
         //view = (View)findViewById(R.id.view);
         //view2 = (View)findViewById(R.id.view);
 
         listArea = (LinearLayout)findViewById(R.id.listArea);
         interiorArea = (RelativeLayout)findViewById(R.id.interiorArea);
+        createroom = (Button)findViewById(R.id.createroom);
 
-        findViewById(R.id.listArea).setOnDragListener(new DragListener());
-        findViewById(R.id.interiorArea).setOnDragListener(new DragListener());
-
-        showlist();
+        createRoom = new CreateRoom(this);
     }
 
     @Override
     protected void onStart(){
         super.onStart();
         Log.d("InteriorActivity", "onStart");
+
+        showlist();
+
+        createroom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createRoom.show();
+            }
+        });
+
+        createRoom.setCanceledOnTouchOutside(false);
+
+        findViewById(R.id.listArea).setOnDragListener(new DragListener());
+        findViewById(R.id.interiorArea).setOnDragListener(new DragListener());
 
         //view.setOnTouchListener(this);
         //view2.setOnTouchListener(this);
@@ -72,6 +103,18 @@ public class InteriorActivity extends AppCompatActivity implements View.OnTouchL
 
         //view.setOnTouchListener(this);
         //view2.setOnTouchListener(this);
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        Log.d("InteriorActivity", "onStop");
+
+        //초기화
+        move = false;
+        x = 0;
+        y = 0;
+        z = 0;
     }
 
     float oldXvalue;
@@ -207,9 +250,13 @@ public class InteriorActivity extends AppCompatActivity implements View.OnTouchL
         for (int i = 0; i < ShoplistActivity.shoppinglist.size(); i++){
 
             for(int j = 0; j < ShoplistActivity.shoppinglist.get(i).amount ; j++){
-                final ImageView imageView = new ImageView(this);
+                ImageView imageView = new ImageView(this);
+
                 imageView.setLayoutParams(new LinearLayout.LayoutParams(width, height));
 
+                imageView.setImageResource(Product.productInfolist.get(ShoplistActivity.shoppinglist.get(i).name).drawableId);
+
+                /*
                 if(ShoplistActivity.shoppinglist.get(i).name.equals("hemnnes")){
                     imageView.setImageResource(R.drawable.hemnnes);
                 }
@@ -222,12 +269,14 @@ public class InteriorActivity extends AppCompatActivity implements View.OnTouchL
                 else if(ShoplistActivity.shoppinglist.get(i).name.equals("tarva")){
                     imageView.setImageResource(R.drawable.tarva);
                 }
+                */
 
                 LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) imageView.getLayoutParams();
                 params.setMargins(margin, margin, margin, margin);
                 imageView.setScaleType(ImageView.ScaleType.FIT_XY);
                 imageView.setId(index);
-                viewID_List.add(Integer.toString(index));
+                //viewID_List.add(Integer.toString(index));
+                viewID_List.add(Product.productInfolist.get(ShoplistActivity.shoppinglist.get(i).name).name);
                 imageView.setTag(IMAGEVIEW_TAG);
 
                 imageView.setOnLongClickListener(new LongClickListener());
@@ -243,23 +292,26 @@ public class InteriorActivity extends AppCompatActivity implements View.OnTouchL
 
         public boolean onLongClick(View view) {
 
-            // 태그 생성
-            ClipData.Item item = new ClipData.Item(
-                    (CharSequence) view.getTag());
+            if(move) {
 
-            String[] mimeTypes = { ClipDescription.MIMETYPE_TEXT_PLAIN };
-            ClipData data = new ClipData(view.getTag().toString(),
-                    mimeTypes, item);
-            View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(
-                    view);
+                // 태그 생성
+                ClipData.Item item = new ClipData.Item(
+                        (CharSequence) view.getTag());
 
-            view.startDrag(data, // data to be dragged
-                    shadowBuilder, // drag shadow
-                    view, // 드래그 드랍할  Vew
-                    0 // 필요없은 플래그
-            );
+                String[] mimeTypes = {ClipDescription.MIMETYPE_TEXT_PLAIN};
+                ClipData data = new ClipData(view.getTag().toString(),
+                        mimeTypes, item);
+                View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(
+                        view);
 
-            view.setVisibility(View.INVISIBLE);
+                view.startDrag(data, // data to be dragged
+                        shadowBuilder, // drag shadow
+                        view, // 드래그 드랍할  Vew
+                        0 // 필요없은 플래그
+                );
+
+                view.setVisibility(View.INVISIBLE);
+            }
             return false;
         }
     }
@@ -301,6 +353,20 @@ public class InteriorActivity extends AppCompatActivity implements View.OnTouchL
                         RelativeLayout containView = (RelativeLayout) v;
                         view.setOnTouchListener(InteriorActivity.this);
                         Log.d("id",Integer.toString(view.getId()));
+
+                        //view id 비교
+
+                        int w = Product.productInfolist.get(viewID_List.get(view.getId())).w * deviceWidth / x;
+                        int h = Product.productInfolist.get(viewID_List.get(view.getId())).h * 380 / y;
+
+                        final int width = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, w, getResources().getDisplayMetrics());
+
+                        final int height = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, h, getResources().getDisplayMetrics());
+
+                        Log.d("가로세로", "" + deviceWidth + ", " + Product.productInfolist.get(viewID_List.get(view.getId())).w + ", " +
+                                w + ", " + Product.productInfolist.get(viewID_List.get(view.getId())).h + ", " + h);
+
+                        view.setLayoutParams(new RelativeLayout.LayoutParams(width,height));
                         containView.addView(view);
                         view.setVisibility(View.VISIBLE);
 
@@ -320,9 +386,7 @@ public class InteriorActivity extends AppCompatActivity implements View.OnTouchL
                         View view = (View) event.getLocalState();
                         view.setVisibility(View.VISIBLE);
                         Context context = getApplicationContext();
-                        Toast.makeText(context,
-                                "이미지를 다른 지역에 드랍할수 없습니다.",
-                                Toast.LENGTH_LONG).show();
+                        //Toast.makeText(context,"이미지를 다른 지역에 드랍할수 없습니다.",Toast.LENGTH_LONG).show();
                         break;
                     }
                     break;

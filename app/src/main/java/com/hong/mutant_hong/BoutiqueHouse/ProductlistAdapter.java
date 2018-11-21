@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import java.util.ArrayList;
 
 public class ProductlistAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -61,7 +60,7 @@ public class ProductlistAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             @Override
             public void onClick(View v) {
                 Context context = v.getContext();
-                Toast.makeText(context, myViewHolder.prName.getText().toString(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, myViewHolder.prName.getText().toString(), Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(context, ProductActivity.class);
                 intent.putExtra("name", myViewHolder.prName.getText());

@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 import java.util.ArrayList;
 
 public class CategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -52,7 +51,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             @Override
             public void onClick(View v) {
                 Context context = v.getContext();
-                Toast.makeText(context, myViewHolder.item.getText().toString(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, myViewHolder.item.getText().toString(), Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(context, ProductlistActivity.class);
                 intent.putExtra("category", myViewHolder.item.getText());

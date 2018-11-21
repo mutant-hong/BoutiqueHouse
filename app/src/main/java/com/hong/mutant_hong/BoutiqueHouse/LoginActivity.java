@@ -71,8 +71,9 @@ public class LoginActivity extends AppCompatActivity {
             String login = loginState.getString("login","0");
 
             if(!login.equals("0")){
+                Log.d("아이디",login);
                 userName.setText(loginState.getString("login","0"));
-                user = login;
+                user = loginState.getString("login","0");
             }
         }
 

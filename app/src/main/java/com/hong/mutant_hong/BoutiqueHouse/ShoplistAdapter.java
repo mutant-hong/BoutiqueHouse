@@ -11,9 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 import java.util.ArrayList;
 
 public class ShoplistAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -151,7 +149,7 @@ public class ShoplistAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         myViewHolder.prImg.setImageResource(shoppinglist.get(position).drawableId);
         myViewHolder.prName.setText(shoppinglist.get(position).name);
-        myViewHolder.prPrice.setText(Integer.toString(shoppinglist.get(position).price));
+        myViewHolder.prPrice.setText("￦ " + Integer.toString(shoppinglist.get(position).price) + "/개");
         myViewHolder.prAmount.setText(Integer.toString(shoppinglist.get(position).amount));
 
         /*

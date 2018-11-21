@@ -69,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference conditionRef = mRootRef.child("search");
 
     private Context mContext;
+
+    static String autoLoginID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -144,7 +146,8 @@ public class MainActivity extends AppCompatActivity {
 
             if(!userPrefs.getString(login,"0").equals("0")){
                 Log.d("자동로그인","성공");
-                LoginActivity.user = userPrefs.getString(login,"0");
+                LoginActivity.user = loginState.getString("login","0");
+                Log.d("아이디",LoginActivity.user);
                 LoginActivity.loginstate = true;
             }
         }catch (Exception e){
@@ -205,37 +208,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart(){
         super.onStart();
 
-        //파이어베이스 데이터 불러오기
-        conditionRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        Log.d("MainActivity", "onStart");
 
-                if(!searchlist.isEmpty())
-                    searchlist.clear();
-
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
-
-                    Log.d("data", snapshot.getKey() + " " + snapshot.getValue().toString());
-
-                    searchlist.add(new Search(snapshot.getKey(), Integer.parseInt(snapshot.getValue().toString())));
-                }
-
-                Collections.sort(searchlist);
-
-                Log.d("size", Integer.toString(searchlist.size()));
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        readData();
 
         //실검 1~10까지 리스트형식으로
-
         down.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                readData();
+
                 num.setVisibility(View.GONE);
                 prName.setVisibility(View.GONE);
                 top10.setVisibility(View.VISIBLE);
@@ -258,7 +241,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //리스트 숨기기
-
         up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -435,19 +417,8 @@ public class MainActivity extends AppCompatActivity {
             final ImageButton imageButton = new ImageButton(this);
             imageButton.setLayoutParams(new LinearLayout.LayoutParams(width, height));
 
-            if(list.get(cnt).equals("hemnnes")){
-                imageButton.setImageResource(R.drawable.hemnnes);
-            }
-            else if(list.get(cnt).equals("kivik")){
-                imageButton.setImageResource(R.drawable.kivik);
-            }
-            else if(list.get(cnt).equals("landskrona")){
-                imageButton.setImageResource(R.drawable.landskrona);
-            }
-            else if(list.get(cnt).equals("tarva")){
-                Log.d("dd","dd");
-                imageButton.setImageResource(R.drawable.tarva);
-            }
+            imageButton.setImageResource(Product.productInfolist.get(list.get(cnt)).drawableId);
+
             imageButton.setBackgroundColor(Color.WHITE);
             imageButton.setScaleType(ImageView.ScaleType.FIT_XY);
             imageButton.setTag(list.get(cnt));
@@ -505,6 +476,34 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void readData(){
+        //파이어베이스 데이터 불러오기
+        conditionRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                if(!searchlist.isEmpty())
+                    searchlist.clear();
+
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+                    Log.d("data", snapshot.getKey() + " " + snapshot.getValue().toString());
+
+                    searchlist.add(new Search(snapshot.getKey(), Integer.parseInt(snapshot.getValue().toString())));
+                }
+
+                Collections.sort(searchlist);
+
+                Log.d("size", Integer.toString(searchlist.size()));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     public void searchTop10Thread(){
         //핸들러 순위, 제품명 set
         han = new Handler(){
@@ -527,8 +526,8 @@ public class MainActivity extends AppCompatActivity {
         th = new Thread(new Runnable() {
             @Override
             public void run() {
-                while (threadflag) {
-                    try {
+                try {
+                    while (threadflag) {
                         Log.d("스레드", "running");
                         Message msg = han.obtainMessage();
 
@@ -539,14 +538,17 @@ public class MainActivity extends AppCompatActivity {
                         Thread.sleep(2000);
 
                         //count 초기화 -> 처음부터 계속 반복
-                        if(count == 10)
+                        if (count == 10){
+                            readData();
                             count = 0;
+                        }
 
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }finally {
-                        Log.d("스레드", "stop");
                     }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }finally {
+                    Log.d("스레드", "stop");
                 }
             }
         });
