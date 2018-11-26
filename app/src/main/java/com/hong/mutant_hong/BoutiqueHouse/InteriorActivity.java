@@ -3,6 +3,7 @@ package com.hong.mutant_hong.BoutiqueHouse;
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
@@ -22,7 +23,7 @@ public class InteriorActivity extends AppCompatActivity implements View.OnTouchL
 
     LinearLayout listArea;
     RelativeLayout interiorArea;
-    Button createroom;
+    Button createroom, to3d;
 
     static boolean move = false;
 
@@ -37,6 +38,9 @@ public class InteriorActivity extends AppCompatActivity implements View.OnTouchL
     int deviceWidth;
 
     CreateRoom createRoom;
+
+    //유니티 보내기
+    String furniture = "";
 
     @Override
     protected void onCreate(Bundle savedInstance){
@@ -60,6 +64,7 @@ public class InteriorActivity extends AppCompatActivity implements View.OnTouchL
         listArea = (LinearLayout)findViewById(R.id.listArea);
         interiorArea = (RelativeLayout)findViewById(R.id.interiorArea);
         createroom = (Button)findViewById(R.id.createroom);
+        to3d = (Button)findViewById(R.id.to3D);
 
         createRoom = new CreateRoom(this);
     }
@@ -83,8 +88,42 @@ public class InteriorActivity extends AppCompatActivity implements View.OnTouchL
         findViewById(R.id.listArea).setOnDragListener(new DragListener());
         findViewById(R.id.interiorArea).setOnDragListener(new DragListener());
 
-        //view.setOnTouchListener(this);
-        //view2.setOnTouchListener(this);
+        to3d.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), UnityPlayerActivity.class);
+
+                for(int i = 0; i < ShoplistActivity.shoppinglist.size(); i++){
+
+                    Log.d("tete", ShoplistActivity.shoppinglist.get(i).name);
+                    //쇼파
+                    if (ShoplistActivity.shoppinglist.get(i).name.equals("landskrona")){
+                        furniture += "sofa ";
+                    }
+                    //의자
+                    else if(ShoplistActivity.shoppinglist.get(i).name.equals("kaustby")){
+                        furniture += "chair ";
+                    }
+                    //침대
+                    else if(ShoplistActivity.shoppinglist.get(i).name.equals("hemnnes")){
+                        furniture += "bed ";
+                    }
+                    //테이블
+                    else if(ShoplistActivity.shoppinglist.get(i).name.equals("torsby")){
+                        furniture += "table ";
+                    }
+                    //책장
+                    else if(ShoplistActivity.shoppinglist.get(i).name.equals("fredde")){
+                        furniture += "bookcase ";
+                    }
+                }
+
+                Log.d("tttt", furniture);
+                intent.putExtra("furniture", furniture);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
     @Override

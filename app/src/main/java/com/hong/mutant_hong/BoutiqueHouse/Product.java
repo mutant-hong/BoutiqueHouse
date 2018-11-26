@@ -27,6 +27,8 @@ public class Product {
 
     public Product(){
         productInfolist = new Hashtable<>();
+
+        productInfo();
     }
 
     public void productInfo(){

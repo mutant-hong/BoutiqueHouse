@@ -53,6 +53,8 @@ public class ShoplistActivity extends AppCompatActivity {
 
     Hashtable<String, Product> productInfolist;
 
+    Product product;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +85,7 @@ public class ShoplistActivity extends AppCompatActivity {
         loginbtn.setBackgroundColor(Color.rgb(213,213,213));
 
         productInfolist = new Hashtable<>();
-        productInfo();
+        product = new Product();
 
         shoplistView.setHasFixedSize(true);
 
@@ -339,7 +341,18 @@ public class ShoplistActivity extends AppCompatActivity {
     }
 
     private void add(String name, int amount){
-        Log.d("pr", productInfolist.get(name).name + ", " + productInfolist.get(name).drawableId);
+        Log.d("pr", product.productInfolist.get(name).name + ", " + product.productInfolist.get(name).drawableId);
+        shoppinglist.add(new Product(product.productInfolist.get(name).drawableId,
+                product.productInfolist.get(name).name,
+                product.productInfolist.get(name).price,
+                product.productInfolist.get(name).w,
+                product.productInfolist.get(name).h,
+                product.productInfolist.get(name).d,
+                product.productInfolist.get(name).attribute,
+                amount)
+        );
+
+        /*
         shoppinglist.add(new Product(productInfolist.get(name).drawableId,
                 productInfolist.get(name).name,
                 productInfolist.get(name).price,
@@ -349,6 +362,7 @@ public class ShoplistActivity extends AppCompatActivity {
                 productInfolist.get(name).attribute,
                 amount)
         );
+        */
         /*
         if(name.equals("landskrona")){
             shoppinglist.add(new Product(R.drawable.landskrona, "landskrona", 599000, 204, 89, 78, "new", amount));
@@ -387,13 +401,13 @@ public class ShoplistActivity extends AppCompatActivity {
 
     private void set(int index, String name, int amount){
 
-        shoppinglist.set(index, new Product(Product.productInfolist.get(name).drawableId,
-                Product.productInfolist.get(name).name,
-                Product.productInfolist.get(name).price,
-                Product.productInfolist.get(name).w,
-                Product.productInfolist.get(name).h,
-                Product.productInfolist.get(name).d,
-                Product.productInfolist.get(name).attribute,
+        shoppinglist.set(index, new Product(product.productInfolist.get(name).drawableId,
+                product.productInfolist.get(name).name,
+                product.productInfolist.get(name).price,
+                product.productInfolist.get(name).w,
+                product.productInfolist.get(name).h,
+                product.productInfolist.get(name).d,
+                product.productInfolist.get(name).attribute,
                 amount)
         );
 
@@ -493,6 +507,7 @@ public class ShoplistActivity extends AppCompatActivity {
         }
     }
 
+    /*
     public void productInfo(){
 
         //쇼파
@@ -594,4 +609,5 @@ public class ShoplistActivity extends AppCompatActivity {
         productInfolist.put("vivan",new Product(R.drawable.vivan, "vivan", 49900, 0, 0, 0, "normal", 1));
 
     }
+    */
 }
