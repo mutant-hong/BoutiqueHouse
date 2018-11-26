@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "84298114130",
+    "firebase_url": "https://boutiquehouse-56876.firebaseio.com",
+    "project_id": "boutiquehouse-56876",
+    "storage_bucket": "boutiquehouse-56876.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:84298114130:android:b29df605692240e5",
+        "android_client_info": {
+          "package_name": "com.hong.mutant_hong.BoutiqueHouse"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "84298114130-g88nu1kug79pa83ft2ldcqf3ad46gmpi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hong.mutant_hong.BoutiqueHouse",
+            "certificate_hash": "e2accb698e0e76204e599e39c885165ee3500f0d"
+          }
+        },
+        {
+          "client_id": "84298114130-3e8scq3ph6ii314rdhkip1b2kr9qqimd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwXzO4ngLi3VFFoFmenOkNSlTgm0wU2_g"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "84298114130-3e8scq3ph6ii314rdhkip1b2kr9qqimd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
