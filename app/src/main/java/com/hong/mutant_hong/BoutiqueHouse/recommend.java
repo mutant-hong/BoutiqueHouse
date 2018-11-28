@@ -22,12 +22,14 @@ public class recommend {
     ArrayList<Float> tanimoto;
     String[] buylist;
     String userName;
+    static ArrayList<Product> userRecommend;
 
     public recommend(String userName){
         this.userName = userName;
 
         recommendlist = new ArrayList<>();
         tanimoto = new ArrayList<>();
+        userRecommend = new ArrayList<>();
     }
 
     public void readData(){
@@ -140,7 +142,8 @@ public class recommend {
                 }
             }
             if(same == false){
-                ProductActivity.userRecommend.add(new Product(Product.productInfolist.get(similar[i]).drawableId,
+
+                userRecommend.add(new Product(Product.productInfolist.get(similar[i]).drawableId,
                         Product.productInfolist.get(similar[i]).name,
                         Product.productInfolist.get(similar[i]).price,
                         Product.productInfolist.get(similar[i]).w,
@@ -148,6 +151,8 @@ public class recommend {
                         Product.productInfolist.get(similar[i]).d,
                         Product.productInfolist.get(similar[i]).attribute,
                         Product.productInfolist.get(similar[i]).amount));
+
+                //Log.d("rec", userRecommend.get(0).name);
             }
         }
 

@@ -389,6 +389,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String searching = search.getText().toString();
+                search.setText("");
                 Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
                 intent.putExtra("search", searching);
                 startActivity(intent);

@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textAlignment="center"
-            android:hint="가로"
+            android:hint="가로 (cm)"
             android:inputType="number"
             android:id="@+id/roomx"/>
 
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textAlignment="center"
-            android:hint="세로"
+            android:hint="세로 (cm)"
             android:inputType="number"
             android:id="@+id/roomy"/>
 
@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textAlignment="center"
-            android:hint="높이"
+            android:hint="높이 (cm)"
             android:inputType="number"
             android:id="@+id/roomz"/>
     </LinearLayout>

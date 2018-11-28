@@ -195,6 +195,10 @@ public class ShoplistActivity extends AppCompatActivity {
                             totalText.setVisibility(View.GONE);
                             totalPrice.setVisibility(View.GONE);
                         }
+
+                        Intent intent = new Intent(getApplicationContext(), BuyingActivity.class);
+                        intent.putExtra("total", Integer.toString(totalprice));
+                        startActivity(intent);
                     }
 
                     else{

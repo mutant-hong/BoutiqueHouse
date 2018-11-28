@@ -2,25 +2,22 @@ package com.hong.mutant_hong.BoutiqueHouse;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class ProductActivity extends AppCompatActivity {
 
@@ -34,7 +31,14 @@ public class ProductActivity extends AppCompatActivity {
     TextView recommendText;
     RecyclerView recommendView;
     RecyclerView.LayoutManager layoutManager;
-    static ArrayList<Product> userRecommend;
+
+    //애니메이션
+    ScrollView prView;
+    LinearLayout animView;
+    ImageView animImage;
+
+    Handler handler;
+    Thread thread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +55,10 @@ public class ProductActivity extends AppCompatActivity {
         up = (Button) findViewById(R.id.up);
         down = (Button) findViewById(R.id.down);
 
+        prView = (ScrollView) findViewById(R.id.prView);
+        animView = (LinearLayout)findViewById(R.id.animView);
+        animImage = (ImageView)findViewById(R.id.animimage);
+
         recommendText = (TextView)findViewById(R.id.recommendText);
 
         recommendView = (RecyclerView) findViewById(R.id.recommendView);
@@ -59,41 +67,58 @@ public class ProductActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recommendView.setLayoutManager(layoutManager);
 
-        userRecommend = new ArrayList<>();
-
         Intent intent = getIntent();
         name = intent.getExtras().getString("name");
 
         new Product().productInfo();
 
 
+        Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.wave);
+
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                prView.setVisibility(View.VISIBLE);
+                animView.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        animImage.startAnimation(animation);
+
+        //추천 리스트
+        if(LoginActivity.loginstate) {
+            recommend recommend = new recommend(LoginActivity.user);
+            recommend.readData();
+
+            ProductlistAdapter productlistAdapter = new ProductlistAdapter(recommend.userRecommend);
+            recommendView.setAdapter(productlistAdapter);
+
+            recommendText.setVisibility(View.VISIBLE);
+            recommendView.setVisibility(View.VISIBLE);
+
+        }
+
+        else{
+            recommendText.setVisibility(View.GONE);
+            recommendView.setVisibility(View.GONE);
+        }
+
+
         img.setImageResource(Product.productInfolist.get(name).drawableId);
         prName.setText(Product.productInfolist.get(name).name);
         prPrice.setText("￦ " + Integer.toString(Product.productInfolist.get(name).price) + "/개");
 
-        /*
-        if(name.equals("landskrona")){
-            img.setImageResource(R.drawable.landskrona);
-            prName.setText(name);
-            prPrice.setText("134000");
-        }
-        else if(name.equals("kivik")){
-            img.setImageResource(R.drawable.kivik);
-            prName.setText(name);
-            prPrice.setText("289000");
-        }
-        else if(name.equals("tarva")){
-            img.setImageResource(R.drawable.tarva);
-            prName.setText(name);
-            prPrice.setText("599000");
-        }
-        else if(name.equals("hemnnes")){
-            img.setImageResource(R.drawable.hemnnes);
-            prName.setText(name);
-            prPrice.setText("1999000");
-        }
-        */
-
+        //최근본항목
         if(MainActivity.list.size() == 0){
             Log.d("productfirst", "add");
             MainActivity.list.add(name);
@@ -149,6 +174,7 @@ public class ProductActivity extends AppCompatActivity {
                 intent.putExtra("amount", amount);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
+                finish();
             }
         });
     }
@@ -157,6 +183,7 @@ public class ProductActivity extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
 
+        /*
         if(LoginActivity.loginstate) {
             recommendText.setVisibility(View.VISIBLE);
             recommendView.setVisibility(View.VISIBLE);
@@ -172,6 +199,7 @@ public class ProductActivity extends AppCompatActivity {
             recommendText.setVisibility(View.GONE);
             recommendView.setVisibility(View.GONE);
         }
+        */
     }
 
 

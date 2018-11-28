@@ -48,6 +48,10 @@
             android:windowSoftInputMode="adjustPan|adjustResize"
             android:configChanges="orientation|screenSize"/>
 
+        <activity android:name="com.hong.mutant_hong.BoutiqueHouse.BuyingActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:configChanges="orientation|screenSize"/>
+
         <activity android:name="com.hong.mutant_hong.BoutiqueHouse.LoginActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:configChanges="orientation|screenSize">
