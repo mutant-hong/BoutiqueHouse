@@ -42,7 +42,7 @@ public class BuyingActivity extends AppCompatActivity {
         address = new Address(this);
 
         Intent intent = getIntent();
-        total.setText(intent.getExtras().getString("total"));
+        total.setText(intent.getExtras().getString("total") + " 원");
 
     }
 
